@@ -1,0 +1,1610 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Toolkit de Expansión Segura - FinanzasPro Lean 365</title>
+<style>
+    :root {
+        --primary: #003366;
+        --secondary: #4a90e2;
+        --success: #28a745;
+        --warning: #ffc107;
+        --danger: #dc3545;
+        --light: #f8f9fa;
+        --dark: #343a40;
+    }
+    
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        background: #f5f7fa;
+        color: #333;
+        line-height: 1.6;
+    }
+    
+    .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        padding: 20px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .logo-container {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .logo {
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: var(--primary);
+        display: flex;
+        flex-direction: column;
+        line-height: 1.2;
+    }
+    
+    .logo-main {
+        font-size: 1.4em;
+    }
+    
+    .logo-sub {
+        font-size: 0.9em;
+        color: var(--secondary);
+    }
+    
+    .company-info {
+        background: var(--light);
+        padding: 15px;
+        border-radius: 8px;
+        font-size: 0.9rem;
+    }
+    
+    h1, h2, h3 {
+        color: var(--primary);
+    }
+    
+    h1 {
+        text-align: center;
+        margin-bottom: 10px;
+    }
+    
+    .subtitle {
+        text-align: center;
+        color: var(--dark);
+        margin-bottom: 30px;
+        font-size: 1.1rem;
+    }
+    
+    .card {
+        padding: 25px;
+        margin: 20px 0;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        border-left: 4px solid var(--secondary);
+        page-break-inside: avoid;
+    }
+    
+    .section-title {
+        background: var(--primary);
+        color: white;
+        padding: 15px 20px;
+        border-radius: 8px;
+        margin: 30px 0 15px 0;
+        font-size: 1.2rem;
+        font-weight: bold;
+        page-break-after: avoid;
+    }
+    
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+    
+    label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 5px;
+        color: var(--dark);
+    }
+    
+    input, select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-size: 1rem;
+        box-sizing: border-box;
+    }
+    
+    input:focus, select:focus {
+        outline: none;
+        border-color: var(--secondary);
+        box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+    }
+    
+    .result-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 15px;
+        margin-top: 20px;
+    }
+    
+    .result-box {
+        padding: 15px;
+        border-radius: 8px;
+        text-align: center;
+        background: var(--light);
+        border: 2px solid #dee2e6;
+    }
+    
+    .result-value {
+        font-size: 1.8rem;
+        font-weight: bold;
+        margin: 10px 0;
+        color: var(--primary);
+    }
+    
+    .result-label {
+        font-size: 0.85rem;
+        color: var(--dark);
+        font-weight: 600;
+    }
+    
+    .result-meta {
+        font-size: 0.75rem;
+        color: #6c757d;
+        margin-top: 5px;
+    }
+    
+    .alert {
+        padding: 12px 15px;
+        margin: 15px 0;
+        border-radius: 6px;
+        font-weight: 500;
+    }
+    
+    .ok { background: #d4edda; color: #155724; border-left: 4px solid var(--success); }
+    .warn { background: #fff3cd; color: #856404; border-left: 4px solid var(--warning); }
+    .danger { background: #f8d7da; color: #721c24; border-left: 4px solid var(--danger); }
+    
+    button {
+        padding: 12px 24px;
+        background: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 600;
+        transition: all 0.3s;
+        margin: 5px;
+    }
+    
+    button:hover {
+        background: var(--secondary);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    
+    button.secondary {
+        background: var(--light);
+        color: var(--dark);
+        border: 1px solid #ddd;
+    }
+    
+    .scenario-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+    }
+    
+    .scenario-box {
+        padding: 20px;
+        border-radius: 8px;
+        background: white;
+        border: 2px solid #dee2e6;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    
+    .scenario-title {
+        font-weight: bold;
+        font-size: 1.1rem;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #dee2e6;
+    }
+    
+    .scenario-detail {
+        margin: 8px 0;
+        display: flex;
+        justify-content: space-between;
+    }
+    
+    .optimistic { border-left: 4px solid var(--success); }
+    .expected { border-left: 4px solid var(--warning); }
+    .pessimistic { border-left: 4px solid var(--danger); }
+    
+    .tab-container {
+        margin: 20px 0;
+    }
+    
+    .tabs {
+        display: flex;
+        border-bottom: 2px solid #ddd;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+        background: white;
+        border-radius: 8px 8px 0 0;
+        overflow: hidden;
+    }
+    
+    .tab {
+        padding: 15px 20px;
+        cursor: pointer;
+        border-bottom: 3px solid transparent;
+        white-space: nowrap;
+        transition: all 0.3s;
+    }
+    
+    .tab:hover {
+        background: var(--light);
+    }
+    
+    .tab.active {
+        border-bottom: 3px solid var(--primary);
+        font-weight: bold;
+        color: var(--primary);
+        background: var(--light);
+    }
+    
+    .tab-content {
+        display: none;
+    }
+    
+    .tab-content.active {
+        display: block;
+    }
+    
+    .history-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+    
+    .history-table th, .history-table td {
+        padding: 12px 15px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+    
+    .history-table th {
+        background: var(--light);
+        font-weight: 600;
+        color: var(--primary);
+    }
+    
+    .history-table tr:hover {
+        background: #f8f9fa;
+    }
+    
+    .instructions {
+        background: #e7f3ff;
+        padding: 20px;
+        border-radius: 8px;
+        margin: 20px 0;
+        border-left: 4px solid var(--secondary);
+    }
+    
+    .instructions h4 {
+        margin-top: 0;
+        color: var(--primary);
+    }
+    
+    .instructions ul, .instructions ol {
+        padding-left: 20px;
+    }
+    
+    .instructions li {
+        margin-bottom: 8px;
+    }
+    
+    .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin: 20px 0;
+    }
+    
+    .summary-card {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        border-left: 4px solid var(--secondary);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    
+    .summary-card h4 {
+        margin-top: 0;
+        color: var(--primary);
+    }
+    
+    /* Estilos para impresión */
+    @media print {
+        body {
+            max-width: 100%;
+            padding: 10px;
+            background: white;
+        }
+        
+        .no-print {
+            display: none !important;
+        }
+        
+        .tab-content {
+            display: block !important;
+            page-break-before: always;
+        }
+        
+        /* Ocultar la primera pestaña (Información General) en impresión */
+        .tab-content:first-of-type {
+            display: none !important;
+        }
+        
+        .tabs {
+            display: none;
+        }
+        
+        .card {
+            box-shadow: none;
+            border: 1px solid #ddd;
+            margin: 10px 0;
+            page-break-inside: avoid;
+        }
+        
+        .section-title {
+            page-break-after: avoid;
+        }
+        
+        h1, h2, h3 {
+            page-break-after: avoid;
+        }
+        
+        .scenario-container {
+            page-break-inside: avoid;
+        }
+        
+        .header {
+            box-shadow: none;
+            border: 1px solid #ddd;
+            page-break-after: avoid;
+            margin-bottom: 15px;
+        }
+        
+        button {
+            display: none;
+        }
+        
+        /* Portada del PDF */
+        h1 {
+            margin-top: 0;
+        }
+        
+        .subtitle {
+            margin-bottom: 20px;
+        }
+        
+        /* Mostrar título de sección en cada página */
+        .tab-content::before {
+            display: block;
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 15px;
+            padding: 15px;
+            background: var(--light);
+            border-left: 4px solid var(--primary);
+            page-break-after: avoid;
+        }
+        
+        .tab-content:nth-child(2)::before {
+            content: "📊 DASHBOARD PRINCIPAL - Análisis Financiero Actual";
+        }
+        
+        .tab-content:nth-child(3)::before {
+            content: "🧮 SIMULACIÓN DE ESCENARIOS";
+        }
+        
+        .tab-content:nth-child(4)::before {
+            content: "💰 CAPACIDAD DE ENDEUDAMIENTO";
+        }
+        
+        .tab-content:nth-child(5)::before {
+            content: "📈 MONITOREO POST-INVERSIÓN";
+        }
+        
+        /* Ajustes para mejor legibilidad */
+        .result-grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+        
+        .scenario-container {
+            grid-template-columns: repeat(3, 1fr);
+        }
+        
+        .form-grid {
+            display: none; /* Ocultar formularios en PDF */
+        }
+    }
+</style>
+</head>
+<body>
+
+<div class="header">
+    <div class="logo-container">
+        <div class="logo">
+            <span class="logo-main">FinanzasPro</span>
+            <span class="logo-sub">Lean 365</span>
+        </div>
+    </div>
+    <div class="company-info">
+        <div><strong>Fecha de análisis:</strong> <span id="fechaActual"></span></div>
+        <div><strong>Empresa:</strong> <span id="nombreEmpresaDisplay">-</span></div>
+        <div><strong>Documento fiscal:</strong> <span id="documentoFiscalDisplay">-</span></div>
+        <div><strong>Moneda:</strong> <span id="monedaDisplay">-</span></div>
+    </div>
+</div>
+
+<h1>Toolkit de Expansión Segura</h1>
+<p class="subtitle">Herramientas completas para planificar, financiar y monitorear su expansión empresarial</p>
+
+<div class="instructions no-print">
+    <h4>📋 Instrucciones de uso:</h4>
+    <ul>
+        <li>Complete la información de su empresa en la pestaña "Información General"</li>
+        <li>Utilice las diferentes pestañas para evaluar su situación financiera actual, simular escenarios y monitorear su expansión</li>
+        <li>Guarde regularmente sus datos utilizando el botón "Guardar Datos"</li>
+        <li>El botón "Exportar PDF Completo" generará un reporte unificado con todas las secciones</li>
+    </ul>
+</div>
+
+<div class="tab-container">
+    <div class="tabs no-print">
+        <div class="tab active" onclick="changeTab(0)">🏢 Información General</div>
+        <div class="tab" onclick="changeTab(1)">📊 Dashboard Principal</div>
+        <div class="tab" onclick="changeTab(2)">🧮 Simulación de Escenarios</div>
+        <div class="tab" onclick="changeTab(3)">💰 Capacidad de Endeudamiento</div>
+        <div class="tab" onclick="changeTab(4)">📈 Monitoreo Post-Inversión</div>
+    </div>
+    
+    <!-- TAB 0: Información General -->
+    <div class="tab-content active no-print">
+        <div class="card">
+            <h3>🏢 Información de la Empresa</h3>
+            
+            <div class="form-grid">
+                <div>
+                    <label>Nombre de la Empresa *</label>
+                    <input id="nombreEmpresa" type="text" placeholder="Ej: Manufacturas XYZ" onchange="actualizarInfoEmpresa()">
+                </div>
+                <div>
+                    <label>Documento Fiscal (NIT/RUC) *</label>
+                    <input id="documentoFiscal" type="text" placeholder="Ej: 123456789-0" onchange="actualizarInfoEmpresa()">
+                </div>
+                <div>
+                    <label>Moneda *</label>
+                    <select id="moneda" onchange="actualizarInfoEmpresa()">
+                        <option value="">Seleccione moneda</option>
+                        <option value="USD">Dólar Estadounidense (USD)</option>
+                        <option value="EUR">Euro (EUR)</option>
+                        <option value="MXN">Peso Mexicano (MXN)</option>
+                        <option value="COP">Peso Colombiano (COP)</option>
+                        <option value="PEN">Sol Peruano (PEN)</option>
+                        <option value="CLP">Peso Chileno (CLP)</option>
+                        <option value="ARS">Peso Argentino (ARS)</option>
+                        <option value="BRL">Real Brasileño (BRL)</option>
+                        <option value="otra">Otra moneda</option>
+                    </select>
+                    <input id="otraMoneda" type="text" placeholder="Especifique su moneda" style="margin-top: 5px; display: none;" onchange="actualizarInfoEmpresa()">
+                </div>
+                <div>
+                    <label>Fecha de Constitución</label>
+                    <input id="fechaConstitucion" type="date">
+                </div>
+                <div>
+                    <label>Sector de la Empresa</label>
+                    <select id="sectorEmpresa">
+                        <option value="">Seleccione sector</option>
+                        <option value="manufactura">Manufactura</option>
+                        <option value="servicios">Servicios</option>
+                        <option value="comercio">Comercio</option>
+                        <option value="tecnologia">Tecnología</option>
+                        <option value="construccion">Construcción</option>
+                        <option value="agroindustria">Agroindustria</option>
+                        <option value="otro">Otro</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Tamaño de la Empresa</label>
+                    <select id="tamanoEmpresa">
+                        <option value="">Seleccione tamaño</option>
+                        <option value="micro">Microempresa (hasta 10 empleados)</option>
+                        <option value="pequena">Pequeña empresa (11-50 empleados)</option>
+                        <option value="mediana">Mediana empresa (51-200 empleados)</option>
+                    </select>
+                </div>
+            </div>
+            
+            <button onclick="guardarDatos()">💾 Guardar Datos</button>
+            <button class="secondary" onclick="cargarDatos()">📂 Cargar Datos Guardados</button>
+        </div>
+        
+        <div class="card">
+            <h3>📋 Guía Rápida de Uso</h3>
+            <div class="instructions">
+                <h4>¿Cómo utilizar este toolkit?</h4>
+                <ol>
+                    <li><strong>Complete la información de su empresa</strong> en esta pestaña</li>
+                    <li><strong>Dashboard Principal:</strong> Evalúe la salud financiera actual de su empresa</li>
+                    <li><strong>Simulación de Escenarios:</strong> Proyecte diferentes escenarios para su expansión con análisis mejorado</li>
+                    <li><strong>Capacidad de Endeudamiento:</strong> Determine cuánto puede pedir prestado de forma segura</li>
+                    <li><strong>Monitoreo Post-Inversión:</strong> Realice seguimiento mensual después de expandirse</li>
+                </ol>
+                
+                <h4>Recomendaciones importantes:</h4>
+                <ul>
+                    <li>Guarde sus datos regularmente para no perder la información</li>
+                    <li>Sea conservador en sus proyecciones, especialmente en el escenario pesimista</li>
+                    <li>Revise mensualmente sus indicadores en la pestaña de monitoreo</li>
+                    <li>Considere siempre mantener un margen de seguridad del 20-30%</li>
+                    <li>Use "Exportar PDF Completo" para generar reportes unificados</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <!-- TAB 1: Dashboard Principal -->
+    <div class="tab-content">
+        <div class="section-title">1️⃣ Datos Financieros Actuales</div>
+        <div class="card">
+            <div class="form-grid">
+                <div>
+                    <label>Activo Corriente</label>
+                    <input id="ac" type="number" placeholder="Ej: 450000">
+                </div>
+                <div>
+                    <label>Pasivo Corriente</label>
+                    <input id="pc" type="number" placeholder="Ej: 280000">
+                </div>
+                <div>
+                    <label>Inventarios</label>
+                    <input id="inv" type="number" placeholder="Ej: 100000">
+                </div>
+                <div>
+                    <label>Efectivo (Caja + Bancos)</label>
+                    <input id="cash" type="number" placeholder="Ej: 85000">
+                </div>
+                <div>
+                    <label>Activo Total</label>
+                    <input id="at" type="number" placeholder="Ej: 1200000">
+                </div>
+                <div>
+                    <label>Pasivo Total</label>
+                    <input id="pt" type="number" placeholder="Ej: 700000">
+                </div>
+                <div>
+                    <label>FEO Mensual (Flujo de Efectivo Operativo)</label>
+                    <input id="feo" type="number" placeholder="Ej: 58000">
+                </div>
+                <div>
+                    <label>Cuota Mensual Total de Deuda</label>
+                    <input id="cuotas" type="number" placeholder="Ej: 26000">
+                </div>
+            </div>
+            
+            <button onclick="calcularIndicadores()">Calcular Indicadores</button>
+        </div>
+        
+        <div class="section-title">2️⃣ Resultados de Indicadores</div>
+        <div class="card">
+            <div class="result-grid">
+                <div class="result-box">
+                    <div class="result-label">Liquidez Corriente</div>
+                    <div id="liquidez" class="result-value">-</div>
+                    <div class="result-meta">Meta: > 1.5</div>
+                </div>
+                <div class="result-box">
+                    <div class="result-label">Prueba Ácida</div>
+                    <div id="tesoreria" class="result-value">-</div>
+                    <div class="result-meta">Meta: > 1.0</div>
+                </div>
+                <div class="result-box">
+                    <div class="result-label">Disponibilidad</div>
+                    <div id="disponibilidad" class="result-value">-</div>
+                    <div class="result-meta">Meta: > 0.2</div>
+                </div>
+                <div class="result-box">
+                    <div class="result-label">Solvencia</div>
+                    <div id="solvencia" class="result-value">-</div>
+                    <div class="result-meta">Meta: > 1.5</div>
+                </div>
+                <div class="result-box">
+                    <div class="result-label">Endeudamiento</div>
+                    <div id="endeudamiento" class="result-value">-</div>
+                    <div class="result-meta">Meta: < 0.6</div>
+                </div>
+                <div class="result-box">
+                    <div class="result-label">Cobertura de Deuda</div>
+                    <div id="cobertura" class="result-value">-</div>
+                    <div class="result-meta">Meta: > 1.5</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section-title">3️⃣ Alertas Automáticas</div>
+        <div class="card">
+            <div id="alertas"></div>
+        </div>
+    </div>
+    
+    <!-- TAB 2: Simulación de Escenarios -->
+    <div class="tab-content">
+        <div class="section-title">🧩 Simulación Avanzada de Escenarios</div>
+        <div class="card">
+            <p><strong>Proyecte cómo se comportaría su empresa en diferentes condiciones para tomar decisiones más informadas.</strong></p>
+            
+            <div class="form-grid">
+                <div>
+                    <label>Inversión Planeada</label>
+                    <input id="inversion" type="number" placeholder="Ej: 800000">
+                </div>
+                <div>
+                    <label>Capital Propio Disponible</label>
+                    <input id="capitalPropio" type="number" placeholder="Ej: 320000">
+                </div>
+                <div>
+                    <label>FEO Mensual Actual</label>
+                    <input id="feoBase" type="number" placeholder="Ej: 58000">
+                </div>
+                <div>
+                    <label>Tasa de Interés Anual (%)</label>
+                    <input id="tasaEscenarios" type="number" placeholder="Ej: 12" value="12">
+                </div>
+                <div>
+                    <label>Plazo Estimado (meses)</label>
+                    <input id="plazoEstimado" type="number" placeholder="Ej: 60" value="60">
+                </div>
+                <div>
+                    <label>Tiempo de Maduración (meses)</label>
+                    <input id="tiempoMaduracion" type="number" placeholder="Ej: 6" value="6">
+                </div>
+            </div>
+            
+            <button onclick="simularEscenarios()">Simular Escenarios Avanzados</button>
+        </div>
+        
+        <div class="scenario-container" id="escenariosResultado">
+            <!-- Los escenarios se generarán aquí -->
+        </div>
+        
+        <div class="section-title">📋 Recomendaciones de Estructuración</div>
+        <div class="card">
+            <div id="recomendacionesEstructuracion"></div>
+        </div>
+        
+        <div class="section-title">📊 Análisis Comparativo</div>
+        <div class="card">
+            <div id="analisisComparativo"></div>
+        </div>
+    </div>
+    
+    <!-- TAB 3: Capacidad de Endeudamiento -->
+    <div class="tab-content">
+        <div class="section-title">💰 Calculadora de Capacidad de Endeudamiento</div>
+        <div class="card">
+            <p><strong>Determine cuánto puede endeudarse sin comprometer la salud financiera de su empresa.</strong></p>
+            
+            <div class="form-grid">
+                <div>
+                    <label>FEO Mensual Promedio</label>
+                    <input id="feoCapacidad" type="number" placeholder="Ej: 58000">
+                </div>
+                <div>
+                    <label>Porcentaje Máximo para Cuotas (Recomendado: 40%)</label>
+                    <input id="porcentajeCuotas" type="number" placeholder="40" value="40">
+                </div>
+                <div>
+                    <label>Tasa de Interés Anual (%)</label>
+                    <input id="tasaInteres" type="number" placeholder="Ej: 12" value="12">
+                </div>
+                <div>
+                    <label>Plazo del Préstamo (años)</label>
+                    <input id="plazoPrestamo" type="number" placeholder="Ej: 5" value="5">
+                </div>
+            </div>
+            
+            <button onclick="calcularCapacidadEndeudamiento()">Calcular Capacidad</button>
+        </div>
+        
+        <div class="section-title">📊 Resultados de Capacidad</div>
+        <div class="card">
+            <div class="result-grid">
+                <div class="result-box">
+                    <div class="result-label">Cuota Máxima Mensual</div>
+                    <div id="cuotaMaxima" class="result-value">-</div>
+                </div>
+                <div class="result-box">
+                    <div class="result-label">Monto Máximo de Préstamo</div>
+                    <div id="montoMaximo" class="result-value">-</div>
+                </div>
+                <div class="result-box">
+                    <div class="result-label">Porcentaje de Apalancamiento</div>
+                    <div id="apalancamiento" class="result-value">-</div>
+                </div>
+                <div class="result-box">
+                    <div class="result-label">Cobertura de Deuda</div>
+                    <div id="coberturaCapacidad" class="result-value">-</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- TAB 4: Monitoreo Post-Inversión -->
+    <div class="tab-content">
+        <div class="section-title">📈 Dashboard de Monitoreo Mensual</div>
+        <div class="card">
+            <p><strong>Registre y monitoree los indicadores clave mes a mes para detectar problemas a tiempo.</strong></p>
+            
+            <div class="form-grid">
+                <div>
+                    <label>Fecha del Reporte</label>
+                    <input id="fechaReporte" type="month" value="">
+                </div>
+                <div>
+                    <label>FEO del Mes</label>
+                    <input id="feoMensual" type="number" placeholder="Ej: 58000">
+                </div>
+                <div>
+                    <label>Cuota Mensual de Deuda</label>
+                    <input id="cuotaMensual" type="number" placeholder="Ej: 11000">
+                </div>
+                <div>
+                    <label>Bancos + Caja</label>
+                    <input id="saldoEfectivo" type="number" placeholder="Ej: 150000">
+                </div>
+                <div>
+                    <label>Gasto Diario Promedio</label>
+                    <input id="gastoDiario" type="number" placeholder="Ej: 2500">
+                </div>
+            </div>
+            
+            <button onclick="agregarRegistro()">Agregar Registro Mensual</button>
+            <button class="secondary" onclick="resetHistorial()">Resetear Historial</button>
+        </div>
+        
+        <div class="section-title">📋 Historial de Indicadores (Últimos 12 meses)</div>
+        <div class="card">
+            <table class="history-table" id="tablaHistorial">
+                <thead>
+                    <tr>
+                        <th>Mes</th>
+                        <th>FEO</th>
+                        <th>Cuota</th>
+                        <th>Cobertura</th>
+                        <th>Días Efectivo</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody id="cuerpoHistorial">
+                    <!-- Las filas se generarán aquí -->
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="section-title">🚨 Sistema de Alertas</div>
+        <div class="card">
+            <div id="alertasMonitoreo"></div>
+        </div>
+    </div>
+</div>
+
+<div class="no-print" style="text-align: center; margin-top: 30px;">
+    <button onclick="guardarDatos()">💾 Guardar Datos</button>
+    <button onclick="window.print()" style="background: var(--success);">📄 Exportar PDF Completo</button>
+    <button class="secondary" onclick="resetTodo()">🔄 Reiniciar Todo</button>
+</div>
+
+<script>
+// Variables globales
+let datosGuardados = {};
+
+// Establecer fecha actual
+function establecerFechas() {
+    const ahora = new Date();
+    document.getElementById('fechaActual').textContent = ahora.toLocaleDateString('es-ES');
+    document.getElementById('fechaReporte').value = ahora.toISOString().substring(0, 7);
+}
+
+// Funciones para cambiar pestañas
+function changeTab(index) {
+    const tabs = document.querySelectorAll('.tab');
+    const contents = document.querySelectorAll('.tab-content');
+    
+    tabs.forEach(tab => tab.classList.remove('active'));
+    contents.forEach(content => content.classList.remove('active'));
+    
+    tabs[index].classList.add('active');
+    contents[index].classList.add('active');
+}
+
+// Función para actualizar información de la empresa en el header
+function actualizarInfoEmpresa() {
+    document.getElementById('nombreEmpresaDisplay').textContent = 
+        document.getElementById('nombreEmpresa').value || '-';
+    
+    document.getElementById('documentoFiscalDisplay').textContent = 
+        document.getElementById('documentoFiscal').value || '-';
+    
+    const monedaSelect = document.getElementById('moneda');
+    const moneda = monedaSelect.value;
+    let monedaTexto = '';
+    
+    if (moneda === 'otra') {
+        monedaTexto = document.getElementById('otraMoneda').value || '-';
+        document.getElementById('otraMoneda').style.display = 'block';
+    } else if (moneda) {
+        monedaTexto = monedaSelect.options[monedaSelect.selectedIndex].text;
+        document.getElementById('otraMoneda').style.display = 'none';
+    } else {
+        monedaTexto = '-';
+        document.getElementById('otraMoneda').style.display = 'none';
+    }
+    
+    document.getElementById('monedaDisplay').textContent = monedaTexto;
+}
+
+// Función para formatear números como moneda
+function formatearMoneda(valor) {
+    return new Intl.NumberFormat('es-ES', {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+    }).format(valor);
+}
+
+// Función para calcular indicadores financieros
+function calcularIndicadores() {
+    const ac = parseFloat(document.getElementById('ac').value) || 0;
+    const pc = parseFloat(document.getElementById('pc').value) || 0;
+    const inv = parseFloat(document.getElementById('inv').value) || 0;
+    const cash = parseFloat(document.getElementById('cash').value) || 0;
+    const at = parseFloat(document.getElementById('at').value) || 0;
+    const pt = parseFloat(document.getElementById('pt').value) || 0;
+    const feo = parseFloat(document.getElementById('feo').value) || 0;
+    const cuotas = parseFloat(document.getElementById('cuotas').value) || 0;
+    
+    // Calcular indicadores
+    const liquidez = pc > 0 ? ac / pc : 0;
+    const tesoreria = pc > 0 ? (ac - inv) / pc : 0;
+    const disponibilidad = pc > 0 ? cash / pc : 0;
+    const solvencia = pt > 0 ? at / pt : 0;
+    const endeudamiento = at > 0 ? pt / at : 0;
+    const cobertura = cuotas > 0 ? feo / cuotas : 0;
+    
+    // Mostrar resultados
+    document.getElementById('liquidez').textContent = liquidez.toFixed(2);
+    document.getElementById('tesoreria').textContent = tesoreria.toFixed(2);
+    document.getElementById('disponibilidad').textContent = disponibilidad.toFixed(2);
+    document.getElementById('solvencia').textContent = solvencia.toFixed(2);
+    document.getElementById('endeudamiento').textContent = endeudamiento.toFixed(2);
+    document.getElementById('cobertura').textContent = cobertura.toFixed(2) + 'x';
+    
+    // Generar alertas
+    generarAlertas(liquidez, tesoreria, disponibilidad, solvencia, endeudamiento, cobertura);
+}
+
+// Función para generar alertas
+function generarAlertas(liquidez, tesoreria, disponibilidad, solvencia, endeudamiento, cobertura) {
+    const alertasDiv = document.getElementById('alertas');
+    alertasDiv.innerHTML = '';
+    
+    // Alerta de cobertura de deuda
+    if (cobertura < 1.1) {
+        alertasDiv.innerHTML += `<div class="alert danger">🚨 <strong>Alerta Crítica:</strong> Cobertura de deuda muy baja (${cobertura.toFixed(2)}x). Riesgo inmediato de incumplimiento.</div>`;
+    } else if (cobertura < 1.5) {
+        alertasDiv.innerHTML += `<div class="alert warn">⚠️ <strong>Precaución:</strong> Cobertura por debajo del óptimo (${cobertura.toFixed(2)}x). Considere reestructurar deuda.</div>`;
+    } else {
+        alertasDiv.innerHTML += `<div class="alert ok">✅ <strong>Saludable:</strong> Cobertura adecuada (${cobertura.toFixed(2)}x)</div>`;
+    }
+    
+    // Alerta de liquidez
+    if (liquidez < 1.0) {
+        alertasDiv.innerHTML += `<div class="alert danger">🚨 <strong>Liquidez crítica:</strong> Posible incapacidad de cubrir obligaciones a corto plazo (${liquidez.toFixed(2)})</div>`;
+    } else if (liquidez < 1.5) {
+        alertasDiv.innerHTML += `<div class="alert warn">⚠️ <strong>Liquidez baja:</strong> Considere reforzar capital de trabajo (${liquidez.toFixed(2)})</div>`;
+    } else {
+        alertasDiv.innerHTML += `<div class="alert ok">✅ <strong>Liquidez saludable</strong> (${liquidez.toFixed(2)})</div>`;
+    }
+    
+    // Alerta de solvencia
+    if (solvencia < 1.2) {
+        alertasDiv.innerHTML += `<div class="alert danger">🚨 <strong>Solvencia insuficiente:</strong> Alto riesgo de insolvencia (${solvencia.toFixed(2)})</div>`;
+    } else if (solvencia < 1.5) {
+        alertasDiv.innerHTML += `<div class="alert warn">⚠️ <strong>Solvencia por debajo del óptimo</strong> (${solvencia.toFixed(2)})</div>`;
+    }
+    
+    // Alerta de endeudamiento
+    if (endeudamiento > 0.7) {
+        alertasDiv.innerHTML += `<div class="alert danger">🚨 <strong>Endeudamiento excesivo:</strong> Riesgo financiero alto (${(endeudamiento * 100).toFixed(0)}%)</div>`;
+    } else if (endeudamiento > 0.6) {
+        alertasDiv.innerHTML += `<div class="alert warn">⚠️ <strong>Endeudamiento en límite superior</strong> (${(endeudamiento * 100).toFixed(0)}%)</div>`;
+    }
+}
+
+// Función mejorada para simular escenarios
+function simularEscenarios() {
+    const inversion = parseFloat(document.getElementById('inversion').value) || 0;
+    const capitalPropio = parseFloat(document.getElementById('capitalPropio').value) || 0;
+    const feoBase = parseFloat(document.getElementById('feoBase').value) || 0;
+    const tasaAnual = parseFloat(document.getElementById('tasaEscenarios').value) || 12;
+    const plazoMeses = parseFloat(document.getElementById('plazoEstimado').value) || 60;
+    const tiempoMaduracion = parseFloat(document.getElementById('tiempoMaduracion').value) || 6;
+    
+    const montoFinanciar = inversion - capitalPropio;
+    const tasaMensual = (tasaAnual / 100) / 12;
+    
+    // Calcular cuota usando fórmula de amortización
+    let cuotaBase = 0;
+    if (tasaMensual > 0 && montoFinanciar > 0) {
+        cuotaBase = montoFinanciar * (tasaMensual * Math.pow(1 + tasaMensual, plazoMeses)) / 
+                    (Math.pow(1 + tasaMensual, plazoMeses) - 1);
+    }
+    
+    const escenarios = [
+        {
+            nombre: "Optimista",
+            descripcion: "Condiciones favorables del mercado",
+            probabilidad: "20%",
+            incrementoVentas: 30,
+            incrementoCostos: 15,
+            retrasoMaduracion: 0,
+            factorRiesgo: 0.95,
+            feo: feoBase * 1.30,
+            cuota: cuotaBase,
+            clase: "optimistic",
+            icono: "🟢"
+        },
+        {
+            nombre: "Esperado",
+            descripcion: "Escenario más probable según proyecciones",
+            probabilidad: "50%",
+            incrementoVentas: 15,
+            incrementoCostos: 20,
+            retrasoMaduracion: tiempoMaduracion * 0.3,
+            factorRiesgo: 1.0,
+            feo: feoBase * 1.15,
+            cuota: cuotaBase * 1.05,
+            clase: "expected",
+            icono: "🟡"
+        },
+        {
+            nombre: "Pesimista",
+            descripcion: "Condiciones adversas o imprevistos",
+            probabilidad: "30%",
+            incrementoVentas: 5,
+            incrementoCostos: 30,
+            retrasoMaduracion: tiempoMaduracion * 0.5,
+            factorRiesgo: 1.15,
+            feo: feoBase * 1.05,
+            cuota: cuotaBase * 1.10,
+            clase: "pessimistic",
+            icono: "🔴"
+        }
+    ];
+    
+    let html = '';
+    let analisisHtml = '<div class="summary-grid">';
+    
+    escenarios.forEach(escenario => {
+        const cobertura = escenario.cuota > 0 ? escenario.feo / escenario.cuota : 0;
+        const margenSeguridad = ((escenario.feo - escenario.cuota) / escenario.feo * 100);
+        const feoRequerido = escenario.cuota * 1.5;
+        const brechaFEO = escenario.feo - feoRequerido;
+        
+        const viabilidad = cobertura >= 1.5 ? "ALTAMENTE VIABLE" : 
+                          cobertura >= 1.3 ? "VIABLE CON PRECAUCIÓN" :
+                          cobertura >= 1.1 ? "VIABLE CON RIESGO" : "NO RECOMENDABLE";
+        
+        const claseViabilidad = cobertura >= 1.5 ? "ok" : 
+                               cobertura >= 1.1 ? "warn" : "danger";
+        
+        html += `
+        <div class="scenario-box ${escenario.clase}">
+            <div class="scenario-title">${escenario.icono} ${escenario.nombre} (${escenario.probabilidad})</div>
+            <p style="font-size: 0.9rem; color: #666; margin-bottom: 15px;">${escenario.descripcion}</p>
+            
+            <div class="scenario-detail">
+                <span><strong>Incremento Ventas:</strong></span>
+                <span>+${escenario.incrementoVentas}%</span>
+            </div>
+            <div class="scenario-detail">
+                <span><strong>Incremento Costos:</strong></span>
+                <span>+${escenario.incrementoCostos}%</span>
+            </div>
+            <div class="scenario-detail">
+                <span><strong>Retraso Maduración:</strong></span>
+                <span>${escenario.retrasoMaduracion.toFixed(0)} meses</span>
+            </div>
+            <hr style="margin: 10px 0; border: none; border-top: 1px solid #ddd;">
+            <div class="scenario-detail">
+                <span><strong>FEO Proyectado:</strong></span>
+                <span>${formatearMoneda(escenario.feo)}</span>
+            </div>
+            <div class="scenario-detail">
+                <span><strong>Cuota Mensual:</strong></span>
+                <span>${formatearMoneda(escenario.cuota)}</span>
+            </div>
+            <div class="scenario-detail">
+                <span><strong>Cobertura:</strong></span>
+                <span style="font-weight: bold; color: var(--primary);">${cobertura.toFixed(2)}x</span>
+            </div>
+            <div class="scenario-detail">
+                <span><strong>Margen Seguridad:</strong></span>
+                <span>${margenSeguridad.toFixed(1)}%</span>
+            </div>
+            <div class="scenario-detail">
+                <span><strong>Brecha vs FEO Óptimo:</strong></span>
+                <span style="color: ${brechaFEO >= 0 ? 'green' : 'red'};">${formatearMoneda(Math.abs(brechaFEO))}</span>
+            </div>
+            
+            <div class="alert ${claseViabilidad}" style="margin-top: 15px; text-align: center;">
+                <strong>${viabilidad}</strong>
+            </div>
+        </div>
+        `;
+        
+        // Agregar al análisis comparativo
+        analisisHtml += `
+        <div class="summary-card">
+            <h4>${escenario.icono} ${escenario.nombre}</h4>
+            <p><strong>Cobertura:</strong> ${cobertura.toFixed(2)}x</p>
+            <p><strong>Viabilidad:</strong> ${viabilidad}</p>
+        </div>
+        `;
+    });
+    
+    analisisHtml += '</div>';
+    
+    // Análisis de mejor/peor caso
+    const mejorCobertura = Math.max(...escenarios.map(e => e.cuota > 0 ? e.feo / e.cuota : 0));
+    const peorCobertura = Math.min(...escenarios.map(e => e.cuota > 0 ? e.feo / e.cuota : 0));
+    
+    analisisHtml += `
+    <div class="alert ${peorCobertura >= 1.3 ? 'ok' : peorCobertura >= 1.1 ? 'warn' : 'danger'}" style="margin-top: 20px;">
+        <strong>Resumen Ejecutivo:</strong><br>
+        • Mejor caso: Cobertura de ${mejorCobertura.toFixed(2)}x<br>
+        • Peor caso: Cobertura de ${peorCobertura.toFixed(2)}x<br>
+        • Recomendación: ${peorCobertura >= 1.3 ? 'Proyecto viable en todos los escenarios' : 
+                          peorCobertura >= 1.1 ? 'Viable pero requiere plan de contingencia robusto' :
+                          'Considere incrementar capital propio o reducir monto de inversión'}
+    </div>
+    `;
+    
+    document.getElementById('escenariosResultado').innerHTML = html;
+    document.getElementById('analisisComparativo').innerHTML = analisisHtml;
+    
+    // Generar recomendaciones de estructuración
+    generarRecomendacionesEstructuracion(inversion, capitalPropio, montoFinanciar, cuotaBase, feoBase);
+}
+
+// Función mejorada para generar recomendaciones de estructuración
+function generarRecomendacionesEstructuracion(inversion, capitalPropio, montoFinanciar, cuotaBase, feoBase) {
+    const porcentajePropio = inversion > 0 ? (capitalPropio / inversion) * 100 : 0;
+    const relacionDeuda = feoBase > 0 ? (cuotaBase / feoBase) * 100 : 0;
+    
+    let recomendaciones = '<div class="summary-grid">';
+    
+    // Análisis de estructura de capital
+    if (porcentajePropio < 30) {
+        recomendaciones += `
+        <div class="summary-card">
+            <h4>🔴 Estructura de Capital</h4>
+            <p><strong>Capital Propio:</strong> ${porcentajePropio.toFixed(1)}%</p>
+            <p><strong>Estado:</strong> Insuficiente</p>
+            <p><strong>Acción:</strong> Incremente su aporte al menos al 40% para reducir riesgo financiero.</p>
+        </div>
+        `;
+    } else if (porcentajePropio < 40) {
+        recomendaciones += `
+        <div class="summary-card">
+            <h4>🟡 Estructura de Capital</h4>
+            <p><strong>Capital Propio:</strong> ${porcentajePropio.toFixed(1)}%</p>
+            <p><strong>Estado:</strong> Por debajo del óptimo</p>
+            <p><strong>Acción:</strong> Considere aumentar al 40% para mejor estabilidad.</p>
+        </div>
+        `;
+    } else {
+        recomendaciones += `
+        <div class="summary-card">
+            <h4>🟢 Estructura de Capital</h4>
+            <p><strong>Capital Propio:</strong> ${porcentajePropio.toFixed(1)}%</p>
+            <p><strong>Estado:</strong> Adecuado</p>
+            <p><strong>Acción:</strong> Estructura cumple con los estándares recomendados.</p>
+        </div>
+        `;
+    }
+    
+    // Análisis de servicio de deuda
+    if (relacionDeuda > 40) {
+        recomendaciones += `
+        <div class="summary-card">
+            <h4>🔴 Servicio de Deuda</h4>
+            <p><strong>Relación Cuota/FEO:</strong> ${relacionDeuda.toFixed(1)}%</p>
+            <p><strong>Estado:</strong> Excesivo</p>
+            <p><strong>Acción:</strong> Negocie plazos más largos o reduzca monto financiado.</p>
+        </div>
+        `;
+    } else if (relacionDeuda > 35) {
+        recomendaciones += `
+        <div class="summary-card">
+            <h4>🟡 Servicio de Deuda</h4>
+            <p><strong>Relación Cuota/FEO:</strong> ${relacionDeuda.toFixed(1)}%</p>
+            <p><strong>Estado:</strong> En límite superior</p>
+            <p><strong>Acción:</strong> Mantenga margen de seguridad del 20%.</p>
+        </div>
+        `;
+    } else {
+        recomendaciones += `
+        <div class="summary-card">
+            <h4>🟢 Servicio de Deuda</h4>
+            <p><strong>Relación Cuota/FEO:</strong> ${relacionDeuda.toFixed(1)}%</p>
+            <p><strong>Estado:</strong> Saludable</p>
+            <p><strong>Acción:</strong> Estructura de pagos es sostenible.</p>
+        </div>
+        `;
+    }
+    
+    // Monto a financiar
+    recomendaciones += `
+    <div class="summary-card">
+        <h4>💰 Financiamiento</h4>
+        <p><strong>Monto a financiar:</strong> ${formatearMoneda(montoFinanciar)}</p>
+        <p><strong>Cuota estimada:</strong> ${formatearMoneda(cuotaBase)}</p>
+        <p><strong>Total a pagar:</strong> ${formatearMoneda(cuotaBase * parseFloat(document.getElementById('plazoEstimado').value || 60))}</p>
+    </div>
+    `;
+    
+    recomendaciones += '</div>';
+    
+    // Recomendaciones adicionales
+    recomendaciones += `
+    <div class="alert warn" style="margin-top: 20px;">
+        <strong>📝 Recomendaciones clave de financiamiento:</strong>
+        <ul style="margin: 10px 0 0 20px;">
+            <li>Busque un plazo que no exceda el 70% de la vida útil del activo</li>
+            <li>Negocie períodos de gracia durante la fase de maduración (${document.getElementById('tiempoMaduracion').value || 6} meses)</li>
+            <li>Mantenga una reserva de contingencia del 20-30% del crédito (${formatearMoneda(montoFinanciar * 0.25)})</li>
+            <li>Considere estructurar pagos crecientes si espera aumento gradual de ingresos</li>
+            <li>Evalúe opciones de garantías que minimicen el costo financiero</li>
+        </ul>
+    </div>
+    `;
+    
+    document.getElementById('recomendacionesEstructuracion').innerHTML = recomendaciones;
+}
+
+// Función para calcular capacidad de endeudamiento
+function calcularCapacidadEndeudamiento() {
+    const feo = parseFloat(document.getElementById('feoCapacidad').value) || 0;
+    const porcentajeCuotas = parseFloat(document.getElementById('porcentajeCuotas').value) || 40;
+    const tasaInteres = parseFloat(document.getElementById('tasaInteres').value) || 0;
+    const plazoPrestamo = parseFloat(document.getElementById('plazoPrestamo').value) || 0;
+    
+    const cuotaMaxima = feo * (porcentajeCuotas / 100);
+    const tasaMensual = (tasaInteres / 100) / 12;
+    const numeroPagos = plazoPrestamo * 12;
+    
+    let montoMaximo = 0;
+    if (tasaMensual > 0) {
+        montoMaximo = cuotaMaxima * ((1 - Math.pow(1 + tasaMensual, -numeroPagos)) / tasaMensual);
+    } else {
+        montoMaximo = cuotaMaxima * numeroPagos;
+    }
+    
+    const apalancamiento = montoMaximo > 0 ? (montoMaximo / (montoMaximo + feo * 12)) * 100 : 0;
+    const cobertura = cuotaMaxima > 0 ? feo / cuotaMaxima : 0;
+    
+    document.getElementById('cuotaMaxima').textContent = `${formatearMoneda(cuotaMaxima)}`;
+    document.getElementById('montoMaximo').textContent = `${formatearMoneda(montoMaximo)}`;
+    document.getElementById('apalancamiento').textContent = `${apalancamiento.toFixed(1)}%`;
+    document.getElementById('coberturaCapacidad').textContent = `${cobertura.toFixed(2)}x`;
+}
+
+// Función para agregar registro mensual
+function agregarRegistro() {
+    const fecha = document.getElementById('fechaReporte').value;
+    const feo = parseFloat(document.getElementById('feoMensual').value) || 0;
+    const cuota = parseFloat(document.getElementById('cuotaMensual').value) || 0;
+    const saldoEfectivo = parseFloat(document.getElementById('saldoEfectivo').value) || 0;
+    const gastoDiario = parseFloat(document.getElementById('gastoDiario').value) || 0;
+    
+    if (!fecha) {
+        alert('Por favor, seleccione una fecha para el reporte.');
+        return;
+    }
+    
+    const cobertura = cuota > 0 ? feo / cuota : 0;
+    const diasEfectivo = gastoDiario > 0 ? saldoEfectivo / gastoDiario : 0;
+    
+    let estado = '';
+    let claseEstado = '';
+    
+    if (cobertura >= 1.5 && diasEfectivo >= 60) {
+        estado = 'Saludable';
+        claseEstado = 'ok';
+    } else if (cobertura >= 1.1 && diasEfectivo >= 45) {
+        estado = 'Atención';
+        claseEstado = 'warn';
+    } else {
+        estado = 'Crítico';
+        claseEstado = 'danger';
+    }
+    
+    let historial = JSON.parse(localStorage.getItem('historialMonitoreo')) || [];
+    
+    historial.push({
+        fecha: fecha,
+        feo: feo,
+        cuota: cuota,
+        cobertura: cobertura,
+        diasEfectivo: diasEfectivo,
+        estado: estado,
+        claseEstado: claseEstado
+    });
+    
+    historial.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+    if (historial.length > 12) {
+        historial = historial.slice(0, 12);
+    }
+    
+    localStorage.setItem('historialMonitoreo', JSON.stringify(historial));
+    
+    actualizarTablaHistorial();
+    actualizarAlertasMonitoreo(historial);
+    
+    document.getElementById('feoMensual').value = '';
+    document.getElementById('cuotaMensual').value = '';
+    document.getElementById('saldoEfectivo').value = '';
+    document.getElementById('gastoDiario').value = '';
+    
+    alert('✅ Registro agregado exitosamente');
+}
+
+// Función para actualizar la tabla de historial
+function actualizarTablaHistorial() {
+    const historial = JSON.parse(localStorage.getItem('historialMonitoreo')) || [];
+    const cuerpo = document.getElementById('cuerpoHistorial');
+    
+    cuerpo.innerHTML = '';
+    
+    if (historial.length === 0) {
+        cuerpo.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #999;">No hay registros</td></tr>';
+        return;
+    }
+    
+    historial.forEach(registro => {
+        const fila = cuerpo.insertRow();
+        fila.insertCell(0).textContent = registro.fecha;
+        fila.insertCell(1).textContent = `${formatearMoneda(registro.feo)}`;
+        fila.insertCell(2).textContent = `${formatearMoneda(registro.cuota)}`;
+        fila.insertCell(3).textContent = registro.cobertura.toFixed(2) + 'x';
+        fila.insertCell(4).textContent = registro.diasEfectivo.toFixed(0);
+        
+        const celdaEstado = fila.insertCell(5);
+        celdaEstado.innerHTML = `<span class="alert ${registro.claseEstado}" style="padding: 5px 10px; display: inline-block;">${registro.estado}</span>`;
+    });
+}
+
+// Función para actualizar alertas de monitoreo
+function actualizarAlertasMonitoreo(historial) {
+    const alertasDiv = document.getElementById('alertasMonitoreo');
+    alertasDiv.innerHTML = '';
+    
+    if (historial.length === 0) {
+        alertasDiv.innerHTML = '<div class="alert warn">No hay datos de monitoreo registrados. Agregue su primer registro mensual.</div>';
+        return;
+    }
+    
+    const ultimo = historial[0];
+    
+    if (ultimo.cobertura < 1.1) {
+        alertasDiv.innerHTML += `<div class="alert danger">🚨 <strong>Alerta Crítica:</strong> Cobertura de deuda muy baja (${ultimo.cobertura.toFixed(2)}x). Acción inmediata requerida.</div>`;
+    } else if (ultimo.cobertura < 1.5) {
+        alertasDiv.innerHTML += `<div class="alert warn">⚠️ <strong>Precaución:</strong> Cobertura por debajo del óptimo (${ultimo.cobertura.toFixed(2)}x)</div>`;
+    } else {
+        alertasDiv.innerHTML += `<div class="alert ok">✅ <strong>Cobertura saludable</strong> (${ultimo.cobertura.toFixed(2)}x)</div>`;
+    }
+    
+    if (ultimo.diasEfectivo < 30) {
+        alertasDiv.innerHTML += `<div class="alert danger">🚨 <strong>Efectivo crítico:</strong> Solo ${ultimo.diasEfectivo.toFixed(0)} días de operación</div>`;
+    } else if (ultimo.diasEfectivo < 60) {
+        alertasDiv.innerHTML += `<div class="alert warn">⚠️ <strong>Efectivo bajo:</strong> ${ultimo.diasEfectivo.toFixed(0)} días de operación. Considere reforzar.</div>`;
+    } else {
+        alertasDiv.innerHTML += `<div class="alert ok">✅ <strong>Efectivo saludable:</strong> ${ultimo.diasEfectivo.toFixed(0)} días de operación</div>`;
+    }
+    
+    // Análisis de tendencias si hay más de 3 registros
+    if (historial.length >= 3) {
+        const ultimosTres = historial.slice(0, 3);
+        const coberturaTendencia = ultimosTres[0].cobertura - ultimosTres[2].cobertura;
+        const efectivoTendencia = ultimosTres[0].diasEfectivo - ultimosTres[2].diasEfectivo;
+        
+        if (coberturaTendencia < -0.2) {
+            alertasDiv.innerHTML += `<div class="alert warn">📉 <strong>Tendencia negativa:</strong> La cobertura ha disminuido en los últimos 3 meses</div>`;
+        } else if (coberturaTendencia > 0.2) {
+            alertasDiv.innerHTML += `<div class="alert ok">📈 <strong>Tendencia positiva:</strong> La cobertura ha mejorado en los últimos 3 meses</div>`;
+        }
+    }
+    
+    // Plan de acción
+    alertasDiv.innerHTML += `
+    <div class="alert" style="background: #e9ecef; color: #495057; margin-top: 15px; border-left: 4px solid var(--secondary);">
+        <strong>📋 Plan de Acción Recomendado:</strong>
+        <ul style="margin: 10px 0 0 20px;">
+            <li>Revise semanalmente el flujo de efectivo y proyecciones</li>
+            <li>Mantenga una reserva equivalente a 3 meses de gastos fijos</li>
+            <li>Si la cobertura cae por debajo de 1.1x, active línea de contingencia inmediatamente</li>
+            <li>Actualice este registro mensualmente para detectar tendencias a tiempo</li>
+            <li>Considere ajustes operativos si las tendencias son negativas por 2+ meses</li>
+        </ul>
+    </div>
+    `;
+}
+
+// Función para resetear el historial
+function resetHistorial() {
+    if (confirm('¿Está seguro de que desea eliminar todo el historial de monitoreo? Esta acción no se puede deshacer.')) {
+        localStorage.removeItem('historialMonitoreo');
+        actualizarTablaHistorial();
+        document.getElementById('alertasMonitoreo').innerHTML = '<div class="alert warn">No hay datos de monitoreo registrados. Agregue su primer registro mensual.</div>';
+        alert('✅ Historial eliminado exitosamente');
+    }
+}
+
+// Función para guardar todos los datos
+function guardarDatos() {
+    const datos = {
+        // Información general
+        nombreEmpresa: document.getElementById('nombreEmpresa').value,
+        documentoFiscal: document.getElementById('documentoFiscal').value,
+        moneda: document.getElementById('moneda').value,
+        otraMoneda: document.getElementById('otraMoneda').value,
+        fechaConstitucion: document.getElementById('fechaConstitucion').value,
+        sectorEmpresa: document.getElementById('sectorEmpresa').value,
+        tamanoEmpresa: document.getElementById('tamanoEmpresa').value,
+        
+        // Dashboard principal
+        ac: document.getElementById('ac').value,
+        pc: document.getElementById('pc').value,
+        inv: document.getElementById('inv').value,
+        cash: document.getElementById('cash').value,
+        at: document.getElementById('at').value,
+        pt: document.getElementById('pt').value,
+        feo: document.getElementById('feo').value,
+        cuotas: document.getElementById('cuotas').value,
+        
+        // Simulación de escenarios
+        inversion: document.getElementById('inversion').value,
+        capitalPropio: document.getElementById('capitalPropio').value,
+        feoBase: document.getElementById('feoBase').value,
+        tasaEscenarios: document.getElementById('tasaEscenarios').value,
+        plazoEstimado: document.getElementById('plazoEstimado').value,
+        tiempoMaduracion: document.getElementById('tiempoMaduracion').value,
+        
+        // Capacidad de endeudamiento
+        feoCapacidad: document.getElementById('feoCapacidad').value,
+        porcentajeCuotas: document.getElementById('porcentajeCuotas').value,
+        tasaInteres: document.getElementById('tasaInteres').value,
+        plazoPrestamo: document.getElementById('plazoPrestamo').value,
+        
+        fechaGuardado: new Date().toISOString()
+    };
+    
+    localStorage.setItem('toolkitDatos', JSON.stringify(datos));
+    alert('✅ Datos guardados correctamente.\n\nFecha: ' + new Date().toLocaleString('es-ES'));
+}
+
+// Función para cargar datos guardados
+function cargarDatos() {
+    const datosGuardados = localStorage.getItem('toolkitDatos');
+    
+    if (!datosGuardados) {
+        alert('ℹ️ No hay datos guardados previamente.');
+        return;
+    }
+    
+    try {
+        const datos = JSON.parse(datosGuardados);
+        
+        // Cargar información general
+        document.getElementById('nombreEmpresa').value = datos.nombreEmpresa || '';
+        document.getElementById('documentoFiscal').value = datos.documentoFiscal || '';
+        document.getElementById('moneda').value = datos.moneda || '';
+        document.getElementById('otraMoneda').value = datos.otraMoneda || '';
+        document.getElementById('fechaConstitucion').value = datos.fechaConstitucion || '';
+        document.getElementById('sectorEmpresa').value = datos.sectorEmpresa || '';
+        document.getElementById('tamanoEmpresa').value = datos.tamanoEmpresa || '';
+        
+        // Cargar dashboard principal
+        document.getElementById('ac').value = datos.ac || '';
+        document.getElementById('pc').value = datos.pc || '';
+        document.getElementById('inv').value = datos.inv || '';
+        document.getElementById('cash').value = datos.cash || '';
+        document.getElementById('at').value = datos.at || '';
+        document.getElementById('pt').value = datos.pt || '';
+        document.getElementById('feo').value = datos.feo || '';
+        document.getElementById('cuotas').value = datos.cuotas || '';
+        
+        // Cargar simulación de escenarios
+        document.getElementById('inversion').value = datos.inversion || '';
+        document.getElementById('capitalPropio').value = datos.capitalPropio || '';
+        document.getElementById('feoBase').value = datos.feoBase || '';
+        document.getElementById('tasaEscenarios').value = datos.tasaEscenarios || '12';
+        document.getElementById('plazoEstimado').value = datos.plazoEstimado || '60';
+        document.getElementById('tiempoMaduracion').value = datos.tiempoMaduracion || '6';
+        
+        // Cargar capacidad de endeudamiento
+        document.getElementById('feoCapacidad').value = datos.feoCapacidad || '';
+        document.getElementById('porcentajeCuotas').value = datos.porcentajeCuotas || '40';
+        document.getElementById('tasaInteres').value = datos.tasaInteres || '12';
+        document.getElementById('plazoPrestamo').value = datos.plazoPrestamo || '5';
+        
+        actualizarInfoEmpresa();
+        
+        const fechaGuardado = datos.fechaGuardado ? new Date(datos.fechaGuardado).toLocaleString('es-ES') : 'Desconocida';
+        alert('✅ Datos cargados correctamente.\n\nÚltimo guardado: ' + fechaGuardado);
+    } catch (error) {
+        alert('❌ Error al cargar los datos. Los datos guardados pueden estar corruptos.');
+        console.error('Error al cargar datos:', error);
+    }
+}
+
+// Función para resetear todo
+function resetTodo() {
+    if (confirm('⚠️ ¿Está seguro de que desea reiniciar TODAS las calculadoras y eliminar TODOS los datos guardados?\n\nEsta acción no se puede deshacer.')) {
+        // Limpiar todos los campos de entrada
+        const inputs = document.querySelectorAll('input[type="text"], input[type="number"], input[type="date"], input[type="month"]');
+        inputs.forEach(input => {
+            input.value = '';
+        });
+        
+        const selects = document.querySelectorAll('select');
+        selects.forEach(select => {
+            select.selectedIndex = 0;
+        });
+        
+        // Restablecer valores por defecto
+        document.getElementById('porcentajeCuotas').value = '40';
+        document.getElementById('tasaInteres').value = '12';
+        document.getElementById('tasaEscenarios').value = '12';
+        document.getElementById('plazoPrestamo').value = '5';
+        document.getElementById('plazoEstimado').value = '60';
+        document.getElementById('tiempoMaduracion').value = '6';
+        document.getElementById('fechaReporte').value = new Date().toISOString().substring(0, 7);
+        
+        // Ocultar campo de otra moneda
+        document.getElementById('otraMoneda').style.display = 'none';
+        
+        // Limpiar resultados
+        const resultados = document.querySelectorAll('.result-value');
+        resultados.forEach(resultado => {
+            resultado.textContent = '-';
+        });
+        
+        // Limpiar alertas y análisis
+        document.getElementById('alertas').innerHTML = '';
+        document.getElementById('escenariosResultado').innerHTML = '';
+        document.getElementById('recomendacionesEstructuracion').innerHTML = '';
+        document.getElementById('analisisComparativo').innerHTML = '';
+        
+        // Resetear información de la empresa en el header
+        actualizarInfoEmpresa();
+        
+        // Resetear historial
+        localStorage.removeItem('historialMonitoreo');
+        actualizarTablaHistorial();
+        document.getElementById('alertasMonitoreo').innerHTML = '<div class="alert warn">No hay datos de monitoreo registrados.</div>';
+        
+        // Eliminar datos guardados
+        localStorage.removeItem('toolkitDatos');
+        
+        // Volver a la primera pestaña
+        changeTab(0);
+        
+        alert('✅ Todos los datos han sido reiniciados exitosamente.');
+    }
+}
+
+// Preparar el documento para impresión completa
+window.addEventListener('beforeprint', function() {
+    // Guardar el estado actual de las pestañas
+    const tabContents = document.querySelectorAll('.tab-content');
+    tabContents.forEach(content => {
+        content.dataset.wasActive = content.classList.contains('active');
+    });
+});
+
+window.addEventListener('afterprint', function() {
+    // Restaurar el estado de las pestañas
+    const tabContents = document.querySelectorAll('.tab-content');
+    tabContents.forEach((content, index) => {
+        if (content.dataset.wasActive === 'true') {
+            changeTab(index);
+        }
+    });
+});
+
+// Inicializar la aplicación
+document.addEventListener('DOMContentLoaded', function() {
+    establecerFechas();
+    actualizarTablaHistorial();
+    
+    const historial = JSON.parse(localStorage.getItem('historialMonitoreo')) || [];
+    actualizarAlertasMonitoreo(historial);
+    
+    // Intentar cargar datos guardados automáticamente
+    const datosGuardados = localStorage.getItem('toolkitDatos');
+    if (datosGuardados) {
+        try {
+            const datos = JSON.parse(datosGuardados);
+            // Cargar silenciosamente sin mostrar alerta
+            document.getElementById('nombreEmpresa').value = datos.nombreEmpresa || '';
+            document.getElementById('documentoFiscal').value = datos.documentoFiscal || '';
+            document.getElementById('moneda').value = datos.moneda || '';
+            document.getElementById('otraMoneda').value = datos.otraMoneda || '';
+            document.getElementById('fechaConstitucion').value = datos.fechaConstitucion || '';
+            document.getElementById('sectorEmpresa').value = datos.sectorEmpresa || '';
+            document.getElementById('tamanoEmpresa').value = datos.tamanoEmpresa || '';
+            
+            document.getElementById('ac').value = datos.ac || '';
+            document.getElementById('pc').value = datos.pc || '';
+            document.getElementById('inv').value = datos.inv || '';
+            document.getElementById('cash').value = datos.cash || '';
+            document.getElementById('at').value = datos.at || '';
+            document.getElementById('pt').value = datos.pt || '';
+            document.getElementById('feo').value = datos.feo || '';
+            document.getElementById('cuotas').value = datos.cuotas || '';
+            
+            document.getElementById('inversion').value = datos.inversion || '';
+            document.getElementById('capitalPropio').value = datos.capitalPropio || '';
+            document.getElementById('feoBase').value = datos.feoBase || '';
+            document.getElementById('tasaEscenarios').value = datos.tasaEscenarios || '12';
+            document.getElementById('plazoEstimado').value = datos.plazoEstimado || '60';
+            document.getElementById('tiempoMaduracion').value = datos.tiempoMaduracion || '6';
+            
+            document.getElementById('feoCapacidad').value = datos.feoCapacidad || '';
+            document.getElementById('porcentajeCuotas').value = datos.porcentajeCuotas || '40';
+            document.getElementById('tasaInteres').value = datos.tasaInteres || '12';
+            document.getElementById('plazoPrestamo').value = datos.plazoPrestamo || '5';
+            
+            actualizarInfoEmpresa();
+        } catch (error) {
+            console.error('Error al cargar datos automáticamente:', error);
+        }
+    }
+});
+</script>
+
+</body>
+</html>
+    
